@@ -4,12 +4,13 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'mongodb',
   connector: 'mongodb',
-  url: 'mongodb+srv://usuario:mintic2022@clusterprogweb.klcmy.mongodb.net/venta_vehiculos?retryWrites=true&w=majority',
+  url: 'mongodb+srv://prog_web:marce1985@cluster0.agohh.mongodb.net/venta_vehiculos?retryWrites=true&w=majority',
+
   host: '',
   port: 0,
   user: '',
   password: '',
-  database: 'venta_vehiculos',
+  database: '',
   useNewUrlParser: true
 };
 

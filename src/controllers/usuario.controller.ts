@@ -1,11 +1,7 @@
 import {service} from '@loopback/core/dist/service';
 import {
   Count,
-  CountSchema,
-  Filter,
-  FilterExcludingWhere,
-  repository,
-  Where
+  CountSchema, Filter, FilterExcludingWhere, repository, Where
 } from '@loopback/repository';
 import {
   del, get,
@@ -87,7 +83,7 @@ export class UsuarioController {
     //Notificar al usuario
     const destino = usuario.correo;
     const asunto = "Registro en la plataforma";
-    const mensaje = `Hola ${usuario.nombres}, su nombre de usuario es: ${usuario.correo} y su contraseña es: ${usuario.clave}`;
+    const mensaje = `Hola ${usuario.nombres}, su nombre de usuario es: ${usuario.correo} y su contraseña es: ${clave}`;
     fetch(`${Llaves.urlServicioNotificaciones}/envio-correo?correo_destino=${destino}&asunto=${asunto}&contenido=${mensaje}`)
 
 
@@ -96,6 +92,34 @@ export class UsuarioController {
       })
 
     return p;
+  }
+
+  @put('/usuarios/cambio-clave/{id}')
+  @response(204, {
+    description: 'Actualizacion correcta',
+
+  })
+  async replaceClaveById(
+    @param.path.string('id') id: string,
+    @requestBody() usuario: Usuario,
+
+  ): Promise<void> {
+    let clave = this.servicioAutentificacion.GenerarClave();
+    let claveCifrada = this.servicioAutentificacion.CifrarClave(clave);
+    usuario.clave = claveCifrada;
+    let u = await this.usuarioRepository.replaceById(id, usuario);
+
+    //Notificar al usuario
+    let destino = usuario.telefono;
+    let contenido = `Hola ${usuario.nombres}, su nombre de usuario es: ${usuario.correo} y su nueva contraseña es: ${clave}`;
+    fetch(`${Llaves.urlServicioNotificaciones}/sms?mensaje=${contenido}&telefono=${destino}`)
+
+
+      .then((data: any) => {
+        console.log(data);
+      })
+
+    return u;
   }
 
   @get('/usuarios/count')

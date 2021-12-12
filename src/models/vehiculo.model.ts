@@ -37,6 +37,10 @@ export class Vehiculo extends Entity {
     type: 'string',
   })
   caracteristicas?: string;
+  @property({
+    type: 'string',
+  })
+  imagen?: string;
 
 
   constructor(data?: Partial<Vehiculo>) {

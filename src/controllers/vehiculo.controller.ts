@@ -91,6 +91,7 @@ export class VehiculoController {
     return this.vehiculoRepository.updateAll(vehiculo, where);
   }
 
+  @authenticate.skip()
   @get('/vehiculos/{id}')
   @response(200, {
     description: 'Vehiculo model instance',
